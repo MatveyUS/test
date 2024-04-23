@@ -1,7 +1,6 @@
 from pygame import *
 
 
-
 class GameSprite(sprite.Sprite):
     def __init__(self, player_image, player_x, player_y, player_speed, wight, height):
        super().__init__()
@@ -46,15 +45,15 @@ FPS = 60
 
 
 
-racket1 = Player('racket1.png', 30, 200, 4, 50, 150) 
-racket2 = Player('raket2.png', 520, 200, 4, 50, 150)
+racket1 = Player('racket.png', 30, 200, 4, 50, 150) 
+racket2 = Player('racket.png', 520, 200, 4, 50, 150)
 ball = GameSprite('ball.png', 200, 200, 4, 50, 50)
 
 
 font.init()
 font = font.Font(None, 35)
-lose1 = font.render('LOSE1!', True, (180, 0, 0))
-lose2 = font.render('LOSE2!', True, (180, 0, 0))
+lose1 = font.render('Проиграл1!', True, (100, 0, 0))
+lose2 = font.render('Проиграл2!', True, (100, 0, 0))
 
 
 speed_x = 3
@@ -72,9 +71,32 @@ while game:
         racket2.update_r()
         ball.rect.x += speed_x
         ball.rect.y += speed_y
-        racket1.reset()
-        racket2.reset()
-        ball.reset()
+        
+
+
+    if sprite.collide_rect(racket1, ball) or sprite.collide_rect(racket2, ball):
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
+        
+
+
+    if ball.rect.y > win_height-50 or ball.rect.y < 0:
+        speed_y *= -1
+
+    if ball.rect.x < 0:
+        finish = True
+        window.blit(lose1, (200, 200))
+        game_over = True
+
+    if ball.rect.x > win_width:
+           finish = True
+           window.blit(lose2, (200, 200))
+           game_over = True
+
+    
+    racket1.reset()
+    racket2.reset()
+    ball.reset()
 
 
     display.update()
